@@ -1,0 +1,72 @@
+<html>
+<title>IGDB AJAX</title>
+<head>
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/static/select2.min.css">
+
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+	<script src="/static/select2.min.js"></script>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+</head>
+<body>
+
+<div class='container'>
+	<h2>IGDB AJAX test</h2>
+	<div class='row'>
+		<div class='col-6'>
+			<label for="games">Games:</label>
+			<select class="js-example-basic-multiple" id="games" name="games[]" multiple="multiple">
+			</select>
+		</div>
+	</div>
+	<div class='row'>
+		<div class='col-6'>
+			<label for="platforms">Platforms:</label>
+			<select class="js-example-basic-multiple" id="platforms" name="platforms[]" multiple="multiple">
+			</select>
+		</div>
+	</div>
+</div>
+
+</body>
+
+<script>
+$(function(){
+	$('#games').select2({
+		width: "100%",
+		ajax: {
+		    url: '/searchgames',
+		    dataType: 'json',
+		    processResults: function (data) {
+				// Tranforms the top-level key of the response object from 'items' to 'results'
+				return {
+					results: $.map(data.games, function(obj) {
+			            return { id: obj.id, text: obj.name };
+			        })
+				};
+			}
+		}
+	});
+
+	$('#platforms').select2({
+		width: "100%",
+		ajax: {
+		    url: '/searchplatforms',
+		    dataType: 'json',
+		    processResults: function (data) {
+				// Tranforms the top-level key of the response object from 'items' to 'results'
+				return {
+					results: $.map(data.platforms, function(obj) {
+			            return { id: obj.id, text: obj.name };
+			        })
+				};
+			}
+		}
+	});
+});
+</script>
+</html>
